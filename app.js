@@ -2,6 +2,42 @@ import { animate, inView, stagger } from "https://cdn.jsdelivr.net/npm/motion@12
 
 const prefersReducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+const emojiLayer = document.querySelector(".ambient-emoji");
+const ambientEmojis = ["🦀", "🏗️", "🧱", "🚧", "📐", "🪜", "💥", "🍺", "🦺", "⚠️"];
+
+if (emojiLayer) {
+  Array.from({ length: 28 }, (_, index) => {
+    const emoji = document.createElement("span");
+    emoji.textContent = ambientEmojis[index % ambientEmojis.length];
+    emoji.style.left = `${(index * 17 + 4) % 100}%`;
+    emoji.style.top = `${(index * 29 + 7) % 94}%`;
+    emoji.style.setProperty("--size", `${18 + (index % 5) * 8}px`);
+    emoji.style.setProperty("--speed", `${2.4 + (index % 7) * 0.52}s`);
+    emoji.style.setProperty("--delay", `${-(index % 6) * 0.7}s`);
+    emoji.style.setProperty("--drift-x", `${-70 + (index % 8) * 20}px`);
+    emoji.style.setProperty("--drift-y", `${-55 + (index % 6) * 24}px`);
+    emojiLayer.append(emoji);
+    return emoji;
+  });
+
+  setInterval(() => {
+    const spark = document.createElement("span");
+    spark.className = "chaos-confetti";
+    spark.textContent = ambientEmojis[Math.floor(Math.random() * ambientEmojis.length)];
+    spark.style.left = `${Math.random() * 92 + 4}%`;
+    spark.style.top = `${Math.random() * 82 + 8}%`;
+    document.body.append(spark);
+    animate(spark, {
+      y: [0, -100, 220],
+      x: [0, (Math.random() - 0.5) * 180],
+      rotate: [0, 1080],
+      scale: [0, 1.8, 0],
+      opacity: [0, 1, 0]
+    }, { duration: 1.5, easing: "ease-in-out" });
+    setTimeout(() => spark.remove(), 1600);
+  }, 900);
+}
+
 if (!prefersReducedMotion) {
   animate(
     ".hero-copy > *",
