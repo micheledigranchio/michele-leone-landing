@@ -1,8 +1,15 @@
 import { animate, inView, stagger } from "https://cdn.jsdelivr.net/npm/motion@12.23.24/+esm";
+import { createIcons, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, FlaskConical, Menu, RotateCw, Siren } from "https://unpkg.com/lucide@0.468.0/dist/esm/lucide.js";
 
 const prefersReducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const menuToggle = document.querySelector("[data-menu-toggle]");
 const siteNav = document.querySelector("[data-site-nav]");
+
+menuToggle?.querySelectorAll("span").forEach((line) => line.remove());
+if (menuToggle && !menuToggle.querySelector("[data-lucide]")) {
+  menuToggle.insertAdjacentHTML("afterbegin", '<i data-lucide="menu" aria-hidden="true"></i>');
+}
+createIcons({ icons: { ChevronDown, ChevronLeft, ChevronRight, ChevronUp, FlaskConical, Menu, RotateCw, Siren } });
 
 menuToggle?.addEventListener("click", () => {
   const isOpen = menuToggle.getAttribute("aria-expanded") === "true";
