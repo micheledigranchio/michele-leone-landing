@@ -113,3 +113,177 @@ chaosButton?.addEventListener("click", () => {
     confetti.forEach((particle) => particle.remove());
   }, 3900);
 });
+
+const gameCanvas = document.querySelector(".ostrich-game");
+const gameStart = document.querySelector("[data-game-start]");
+const gameScore = document.querySelector("[data-game-score]");
+const gameTime = document.querySelector("[data-game-time]");
+const gameStatus = document.querySelector("[data-game-status]");
+
+if (gameCanvas) {
+  const context = gameCanvas.getContext("2d");
+  const world = { width: gameCanvas.width, height: gameCanvas.height };
+  const keys = new Set();
+  let running = false;
+  let score = 0;
+  let timeLeft = 30;
+  let lastTime = performance.now();
+  let lastSecond = performance.now();
+  let player;
+  let helmets;
+  let ostriches;
+
+  const randomPoint = (padding = 50) => ({
+    x: padding + Math.random() * (world.width - padding * 2),
+    y: padding + Math.random() * (world.height - padding * 2)
+  });
+
+  const resetGame = () => {
+    player = { x: 110, y: world.height / 2, radius: 20, speed: 240, heading: 0 };
+    helmets = Array.from({ length: 8 }, () => ({ ...randomPoint(74), collected: false, bob: Math.random() * Math.PI * 2 }));
+    ostriches = Array.from({ length: 5 }, (_, index) => ({ ...randomPoint(80), direction: Math.random() * Math.PI * 2, speed: 46 + index * 9, phase: index }));
+    score = 0;
+    timeLeft = 30;
+    gameScore.textContent = score;
+    gameTime.textContent = timeLeft;
+  };
+
+  const drawPlayer = () => {
+    context.save();
+    context.translate(player.x, player.y);
+    context.rotate(player.heading);
+    context.font = "40px sans-serif";
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+    context.fillText("🦀", 0, -13);
+    context.font = "30px sans-serif";
+    context.fillText("👷", 0, 14);
+    context.restore();
+  };
+
+  const drawOstrich = (ostrich, elapsed) => {
+    context.save();
+    context.translate(ostrich.x, ostrich.y + Math.sin(elapsed / 150 + ostrich.phase) * 4);
+    context.scale(Math.cos(ostrich.direction) >= 0 ? 1 : -1, 1);
+    context.font = "42px sans-serif";
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+    context.fillText("🪿", 0, 0);
+    context.restore();
+  };
+
+  const draw = (elapsed) => {
+    const sky = context.createLinearGradient(0, 0, 0, world.height);
+    sky.addColorStop(0, "#41d9ff");
+    sky.addColorStop(0.45, "#ffbe57");
+    sky.addColorStop(0.46, "#e18b35");
+    sky.addColorStop(1, "#bd5727");
+    context.fillStyle = sky;
+    context.fillRect(0, 0, world.width, world.height);
+
+    context.globalAlpha = 0.3;
+    context.font = "82px sans-serif";
+    context.fillText("🏗️", 70, 90);
+    context.fillText("🏗️", 710, 100);
+    context.globalAlpha = 1;
+
+    context.fillStyle = "rgba(255, 212, 0, 0.38)";
+    for (let x = -40; x < world.width + 80; x += 95) {
+      context.fillRect(x, world.height - 42, 55, 12);
+    }
+
+    helmets.filter((helmet) => !helmet.collected).forEach((helmet) => {
+      context.save();
+      context.translate(helmet.x, helmet.y + Math.sin(elapsed / 220 + helmet.bob) * 7);
+      context.font = "30px sans-serif";
+      context.textAlign = "center";
+      context.fillText("⛑️", 0, 0);
+      context.restore();
+    });
+    ostriches.forEach((ostrich) => drawOstrich(ostrich, elapsed));
+    drawPlayer();
+  };
+
+  const update = (delta) => {
+    if (!running) return;
+    let moveX = 0;
+    let moveY = 0;
+    if (keys.has("ArrowUp") || keys.has("w")) moveY -= 1;
+    if (keys.has("ArrowDown") || keys.has("s")) moveY += 1;
+    if (keys.has("ArrowLeft") || keys.has("a")) moveX -= 1;
+    if (keys.has("ArrowRight") || keys.has("d")) moveX += 1;
+    if (moveX || moveY) {
+      const magnitude = Math.hypot(moveX, moveY);
+      player.x += moveX / magnitude * player.speed * delta;
+      player.y += moveY / magnitude * player.speed * delta;
+      player.heading = Math.atan2(moveY, moveX);
+    }
+    player.x = Math.max(25, Math.min(world.width - 25, player.x));
+    player.y = Math.max(35, Math.min(world.height - 25, player.y));
+
+    ostriches.forEach((ostrich) => {
+      if (Math.random() < 0.018) ostrich.direction += (Math.random() - 0.5) * 1.8;
+      ostrich.x += Math.cos(ostrich.direction) * ostrich.speed * delta;
+      ostrich.y += Math.sin(ostrich.direction) * ostrich.speed * delta;
+      if (ostrich.x < 20 || ostrich.x > world.width - 20) ostrich.direction = Math.PI - ostrich.direction;
+      if (ostrich.y < 30 || ostrich.y > world.height - 24) ostrich.direction = -ostrich.direction;
+    });
+
+    helmets.forEach((helmet) => {
+      if (!helmet.collected && Math.hypot(player.x - helmet.x, player.y - helmet.y) < 32) {
+        helmet.collected = true;
+        score += 1;
+        gameScore.textContent = score;
+        gameStatus.textContent = `Casco recuperato. Michele esulta: ${score}/8.`;
+      }
+    });
+    if (score === helmets.length) {
+      running = false;
+      gameStatus.textContent = "VITTORIA! Gli struzzi applaudono e Michele riceve un casco nuovo.";
+      gameStart.textContent = "Rigioca 🦀";
+    }
+  };
+
+  const gameLoop = (now) => {
+    const delta = Math.min((now - lastTime) / 1000, 0.04);
+    lastTime = now;
+    if (running && now - lastSecond >= 1000) {
+      timeLeft -= 1;
+      lastSecond = now;
+      gameTime.textContent = timeLeft;
+      if (timeLeft <= 0) {
+        running = false;
+        gameStatus.textContent = `Tempo finito: ${score}/8 caschi. Gli struzzi vincono una pizza.`;
+        gameStart.textContent = "Riprova 🦀";
+      }
+    }
+    update(delta);
+    draw(now);
+    requestAnimationFrame(gameLoop);
+  };
+
+  const startGame = () => {
+    resetGame();
+    running = true;
+    lastSecond = performance.now();
+    gameStatus.textContent = "VAI! Michele corre. Gli struzzi fanno finta di non guardarlo.";
+    gameStart.textContent = "Ricomincia 🦀";
+  };
+
+  addEventListener("keydown", (event) => {
+    if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "w", "a", "s", "d"].includes(event.key)) {
+      keys.add(event.key);
+      event.preventDefault();
+    }
+  });
+  addEventListener("keyup", (event) => keys.delete(event.key));
+  document.querySelectorAll("[data-game-move]").forEach((button) => {
+    const keyMap = { up: "ArrowUp", down: "ArrowDown", left: "ArrowLeft", right: "ArrowRight" };
+    const key = keyMap[button.dataset.gameMove];
+    button.addEventListener("pointerdown", () => keys.add(key));
+    ["pointerup", "pointerleave", "pointercancel"].forEach((eventName) => button.addEventListener(eventName, () => keys.delete(key)));
+  });
+  gameStart.addEventListener("click", startGame);
+  resetGame();
+  requestAnimationFrame(gameLoop);
+}
