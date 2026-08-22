@@ -278,7 +278,10 @@ if (gameCanvas) {
   document.querySelectorAll("[data-game-move]").forEach((button) => {
     const keyMap = { up: "ArrowUp", down: "ArrowDown", left: "ArrowLeft", right: "ArrowRight" };
     const key = keyMap[button.dataset.gameMove];
-    button.addEventListener("pointerdown", () => keys.add(key));
+    button.addEventListener("pointerdown", (event) => {
+      event.preventDefault();
+      keys.add(key);
+    });
     ["pointerup", "pointerleave", "pointercancel"].forEach((eventName) => button.addEventListener(eventName, () => keys.delete(key)));
   });
   gameStart.addEventListener("click", startGame);
