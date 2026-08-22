@@ -685,7 +685,7 @@ body.crab-panic .rave-lights {
 .work-body p { margin: 0; color: var(--text-soft); font-size: 15px; }
 
 /* ---------- Ostrich chase ---------- */
-.game-section { max-width: 1080px; }
+.game-section { position: relative; z-index: 1001; max-width: 1080px; }
 .game-intro { max-width: 620px; margin: 16px 0 0; color: var(--text-soft); }
 .game-shell {
   padding: 18px;
