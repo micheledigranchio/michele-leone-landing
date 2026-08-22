@@ -69,6 +69,12 @@
           <a class="btn btn-primary" href="#contact">Affidagli un cantiere 🚧</a>
           <a class="btn btn-ghost" href="#work">Vedi i danni</a>
         </div>
+        <div class="site-controls" aria-label="Controlli del cantiere">
+          <button class="alarm-button" type="button" data-crab-alarm>
+            <span aria-hidden="true">🚨</span> Emergenza granchio
+          </button>
+          <p class="alarm-message" aria-live="polite">Cantiere nella norma. Probabilmente.</p>
+        </div>
 
         <ul class="stats">
           <li><strong>13</strong><span>solai calcolati<br />a occhio</span></li>
@@ -212,6 +218,15 @@
           <ul class="tags"><li>Bonus</li><li>Polvere</li><li>Pazienza</li></ul>
         </article>
       </div>
+      <aside class="site-meter" aria-label="Misuratore tecnico di stabilità">
+        <div class="meter-dial" aria-hidden="true"><span>🦀</span></div>
+        <div>
+          <p class="meter-label">Stabilità del progetto</p>
+          <strong data-stability>87%</strong>
+          <p>Misurata con il metodo scientifico «a sentimento».</p>
+        </div>
+        <button type="button" class="meter-button" data-recalculate>Ricalcola col gomito</button>
+      </aside>
     </section>
 
     <!-- WORK -->
@@ -307,5 +322,6 @@
     <p>Sito realizzato in HTML e CSS da un ingegnere edile. Si vede. 🦀</p>
     <p><a href="#top">Risali la scala (quella che non porta da nessuna parte) ↑</a></p>
   </footer>
+  <script type="module" src="app.js"></script>
 </body>
 </html>
