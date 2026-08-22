@@ -181,13 +181,11 @@ if (gameCanvas) {
     context.fillStyle = sky;
     context.fillRect(0, 0, world.width, world.height);
 
-    context.globalAlpha = 0.3;
     context.font = "82px sans-serif";
     context.fillText("🏗️", 70, 90);
     context.fillText("🏗️", 710, 100);
-    context.globalAlpha = 1;
 
-    context.fillStyle = "rgba(255, 212, 0, 0.38)";
+    context.fillStyle = "rgba(255, 212, 0, 0.88)";
     for (let x = -40; x < world.width + 80; x += 95) {
       context.fillRect(x, world.height - 42, 55, 12);
     }
