@@ -45,3 +45,35 @@ recalculateButton?.addEventListener("click", () => {
   animate(".meter-dial", { rotate: [0, 360], scale: [1, 1.18, 1] }, { duration: 0.65, easing: "ease-in-out" });
   animate(stability, { scale: [1, 1.3, 1], color: ["#ffd400", "#ff3ec8", "#ffd400"] }, { duration: 0.5 });
 });
+
+const chaosButton = document.querySelector("[data-chaos-mode]");
+
+chaosButton?.addEventListener("click", () => {
+  document.body.classList.add("chaos-mode");
+  alarmMessage.textContent = "COLLAUDO COMPLETATO: il solaio ora balla techno. Risultato: boh.";
+
+  const emojis = ["🦀", "🏗️", "🧱", "🚧", "📐", "💥"];
+  const confetti = Array.from({ length: 36 }, () => {
+    const particle = document.createElement("span");
+    particle.className = "chaos-confetti";
+    particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    particle.style.left = `${Math.random() * 100}%`;
+    particle.style.top = `${Math.random() * 35 + 10}%`;
+    document.body.append(particle);
+    return particle;
+  });
+
+  animate(confetti, {
+    x: () => (Math.random() - 0.5) * innerWidth,
+    y: () => innerHeight * (Math.random() * 0.75 + 0.4),
+    rotate: () => Math.random() * 1440 - 720,
+    scale: [0, 1.6, 0.4],
+    opacity: [0, 1, 0]
+  }, { duration: 1.7, easing: "ease-out" });
+
+  animate(".chaos-button", { rotate: [0, -10, 10, -7, 0], scale: [1, 1.25, 1] }, { duration: 0.7 });
+  setTimeout(() => {
+    document.body.classList.remove("chaos-mode");
+    confetti.forEach((particle) => particle.remove());
+  }, 3900);
+});
