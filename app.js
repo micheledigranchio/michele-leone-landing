@@ -1,6 +1,19 @@
 import { animate, inView, stagger } from "https://cdn.jsdelivr.net/npm/motion@12.23.24/+esm";
 
 const prefersReducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const menuToggle = document.querySelector("[data-menu-toggle]");
+const siteNav = document.querySelector("[data-site-nav]");
+
+menuToggle?.addEventListener("click", () => {
+  const isOpen = menuToggle.getAttribute("aria-expanded") === "true";
+  menuToggle.setAttribute("aria-expanded", String(!isOpen));
+  siteNav.classList.toggle("is-open", !isOpen);
+});
+
+siteNav?.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => {
+  menuToggle?.setAttribute("aria-expanded", "false");
+  siteNav.classList.remove("is-open");
+}));
 
 const emojiLayer = document.querySelector(".ambient-emoji");
 const ambientEmojis = ["🦀", "🏗️", "🧱", "🚧", "📐", "🪜", "💥", "🍺", "🦺", "⚠️"];

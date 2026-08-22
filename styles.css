@@ -252,6 +252,25 @@ body.crab-panic .rave-lights {
 .nav a { color: var(--text-soft); transition: color 0.2s, text-shadow 0.2s; }
 .nav a:hover { color: var(--neon-green); text-shadow: 0 0 12px var(--neon-green); }
 
+.menu-toggle {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  padding: 9px;
+  border: 2px solid var(--hazard);
+  border-radius: 8px;
+  background: rgba(255, 212, 0, 0.12);
+  color: var(--hazard);
+  font-family: var(--font-display);
+  font-size: 10px;
+  cursor: pointer;
+}
+.menu-toggle span { display: block; width: 16px; height: 2px; background: currentColor; transition: transform 0.2s; }
+.menu-toggle b { margin-left: 4px; font-weight: inherit; text-transform: uppercase; }
+.menu-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.menu-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.menu-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
 .nav-cta {
   padding: 10px 18px;
   border: 3px solid #000;
@@ -292,6 +311,42 @@ body.crab-panic .rave-lights {
   font-size: clamp(1.9rem, 4.4vw, 3rem);
   text-shadow: 3px 3px 0 var(--crab), 6px 6px 0 rgba(0, 0, 0, 0.6);
 }
+
+.page-home .about,
+.page-home .skills,
+.page-home .work,
+.page-home .game-section,
+.page-home .testimonial,
+.page-home .contact { display: none; }
+
+.home-modules { padding-top: 0; }
+.home-modules h2 { margin-bottom: 30px; }
+.module-links { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+.module-links a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  min-height: 125px;
+  padding: 22px 10px;
+  border: 3px solid #000;
+  border-radius: var(--radius-m);
+  background: var(--panel);
+  box-shadow: 5px 5px 0 #000;
+  font-family: var(--font-display);
+  font-size: 12px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: transform 0.2s, background 0.2s;
+}
+.module-links a:first-child { background: var(--crab); }
+.module-links a:nth-child(2) { background: var(--neon-green); color: #071a12; }
+.module-links a:nth-child(3) { background: var(--hazard); color: #171000; }
+.module-links a:nth-child(4) { background: var(--neon-pink); }
+.module-links a:nth-child(5) { background: var(--neon-cyan); color: #05232a; }
+.module-links a:hover { transform: translate(-4px, -6px) rotate(-2deg); }
+.module-links a::first-letter { font-size: 30px; }
+.module-main { min-height: calc(100vh - 160px); }
 
 .lead { color: var(--text-soft); font-size: 1.05rem; }
 .lead strong { color: var(--hazard); }
@@ -902,6 +957,7 @@ body.chaos-mode .card, body.chaos-mode .work-item { animation-duration: 0.36s !i
   .work-grid { grid-template-columns: repeat(2, 1fr); }
   .work-item--wide { grid-column: span 2; }
   .game-controls { display: grid; }
+  .module-links { grid-template-columns: repeat(3, 1fr); }
 }
 
 @media (max-width: 640px) {
@@ -910,8 +966,23 @@ body.chaos-mode .card, body.chaos-mode .work-item { animation-duration: 0.36s !i
   .brand { min-width: 0; gap: 8px; }
   .brand-mark { width: 36px; height: 36px; font-size: 18px; }
   .brand-name { font-size: 11px; line-height: 1.2; }
-  .nav a:not(.nav-cta) { display: none; }
-  .nav-cta { padding: 9px 11px; font-size: 10px; text-align: center; }
+  .menu-toggle { display: inline-flex; }
+  .nav {
+    position: absolute;
+    top: calc(100% + 1px);
+    left: 0;
+    right: 0;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 12px 14px 16px;
+    background: rgba(11, 6, 22, 0.98);
+    border-bottom: 3px solid var(--crab);
+  }
+  .nav.is-open { display: flex; }
+  .nav a, .nav a:not(.nav-cta) { display: block; padding: 13px 8px; color: var(--text); }
+  .nav-cta { padding: 13px 12px !important; font-size: 11px; text-align: center; }
   .section { padding: 56px 18px; }
   .section-head { margin-bottom: 32px; }
   .section h2 { font-size: clamp(1.7rem, 9vw, 2.15rem); line-height: 1.1; }
@@ -950,6 +1021,8 @@ body.chaos-mode .card, body.chaos-mode .work-item { animation-duration: 0.36s !i
   .contact-address { font-size: 13px; overflow-wrap: anywhere; }
   .socials { display: grid; gap: 12px; }
   .site-footer { padding: 26px 18px 44px; font-size: 12.5px; }
+  .module-links { grid-template-columns: repeat(2, 1fr); }
+  .module-links a:last-child { grid-column: span 2; }
   .game-shell { padding: 12px; }
   .game-topbar { align-items: flex-start; flex-wrap: wrap; }
   .game-topbar p { font-size: 10px; }

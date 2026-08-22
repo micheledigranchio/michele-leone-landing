@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Bungee:wght@400&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
+<body class="page-home">
   <div class="rave-lights" aria-hidden="true"></div>
   <div class="crab-rain" aria-hidden="true">
     <span>🦀</span><span>🦀</span><span>🦀</span><span>🦀</span><span>🦀</span>
@@ -42,11 +42,15 @@
       <span class="brand-mark">🦀</span>
       <span class="brand-name">Ing. Michele Leone</span>
     </a>
-    <nav class="nav" aria-label="Navigazione principale">
-      <a href="#about">Chi è 'sto tizio</a>
-      <a href="#skills">Competenze (?)</a>
-      <a href="#work">Opere</a>
-      <a href="#contact" class="nav-cta">Chiamalo, forse risponde</a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-toggle>
+      <span></span><span></span><span></span><b>Menu</b>
+    </button>
+    <nav id="site-nav" class="nav" aria-label="Navigazione principale" data-site-nav>
+      <a href="chi-sono.html">Chi è 'sto tizio</a>
+      <a href="competenze.html">Competenze (?)</a>
+      <a href="opere.html">Opere</a>
+      <a href="gioco.html">Gioco struzzi</a>
+      <a href="contatti.html" class="nav-cta">Contatti</a>
     </nav>
   </header>
 
@@ -101,6 +105,18 @@
           Il collega a sinistra sostiene di essere un consulente strutturista.
         </figcaption>
       </figure>
+    </section>
+
+    <section class="home-modules section">
+      <p class="kicker">🗺️ Mappa del disastro</p>
+      <h2>Ogni piano ha la sua pagina.</h2>
+      <div class="module-links">
+        <a href="chi-sono.html">🦀<span>Chi è Michele</span></a>
+        <a href="competenze.html">📐<span>Competenze</span></a>
+        <a href="opere.html">🏗️<span>Opere</span></a>
+        <a href="gioco.html">🪿<span>Gioco</span></a>
+        <a href="contatti.html">📞<span>Contatti</span></a>
+      </div>
     </section>
 
     <!-- ABOUT -->
